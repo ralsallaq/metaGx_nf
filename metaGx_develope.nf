@@ -243,7 +243,7 @@ if(params.skipQtrim == false){
     
     vpair_ch.into { vpair_ch1; vpair_ch2; vpair_ch3}
     
-    /*
+    
     process chckFQ {
         container "${container_fastqc}"
         label 'multithread'
@@ -258,7 +258,7 @@ if(params.skipQtrim == false){
         fastqc -t 4 ${intrlF} 
         """
     }
-    */
+    
     
     process removeAdapters {
         container "${container_cutadapt}"
@@ -692,12 +692,6 @@ else if(runMode == "read-gene")
         set geneName, file("${geneName}.extended.faa") into geneExtFAA_ch
         
         """
-#        module load python/2.7.15-rhel7
-#        getExtendedSeqCombDerep.py \
-#        -s ${seedF} \
-#        -db ${geneExDBFAA} \
-#        -bt ${blastLikeAlnF} \
-#        -o ${geneName}.extended.faa
         # get target ids
         cat "${blastLikeAlnF}" | awk '{print \$2}' > target_ids
         # remove duplicates
@@ -1167,33 +1161,6 @@ else if(runMode == "read-annot")
         """
     }
 
-/*
-    process gethitsFAAFromDB {
-        container "${container_seqtk}"
-        label 'io_mem'
-        //publishDir "${params.outD}/read_based_annotation/filtered", mode: 'copy'
-        
-        input:
-        set sname, file("hitsInCSV") from filtrdHitsCSV_ch1
-        file geneExDBFAA
-        
-        output:
-        set sname, file("hits_from_db_in_${sname}.fa") into filtrdHitsFaa_ch 
-        
-        """
-        # get target ids
-        cat "${hitsInCSV}" | awk '{FS=",";print \$4}'|sed '/^\$/d' > target_ids 
-        awk '!seen[\$1]++'  target_ids >  target_ids_nodup
-        # use seqtk to subseq the database
-        seqtk subseq ${geneExDBFAA} target_ids_nodup > hits_from_db_in_${sname}.fa 
-		
-        """
-    }
-
-
-    filtrdHitsCSV_ch2.join(filtrdHitsFaa_ch).set{filtrdHitsComb_ch}
-
-*/
 
     process addAnnotFromID {
         label 'io_mem'
