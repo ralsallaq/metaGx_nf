@@ -16,3 +16,13 @@ sname=sample unique identifier that will be used through the pipeline
 ./nextflow run metaGx_develope.nf -w /path/to/scratch/directory --sampleInfo sampleInfo.csv --mode assembly -resume
 ## case 2 the paths in sampleInfo.csv points to quality-trimmed files 
 ./nextflow run metaGx_develope.nf -w /path/to/scratch/directory --sampleInfo sampleInfo.csv --mode assembly --skipQtrim true -resume
+
+# Example: run read annotation by alignment on paired reads
+prepare a sample information CSV file (e.g. sampleInfo.csv) with the following headings: 
+R1=absolute path to forward reads
+R2=absolute path to reverse reads
+sname=sample unique identifier that will be used through the pipeline
+## case 1 perform quality trimming first and use diamond for alignment: 
+./nextflow run metaGx_develope.nf -w /path/to/scratch/directory --sampleInfo sampleInfo.csv --geneExtensionDBF /path/to/protein/database --useDiamond true --skipTaxClassify true --mode read-annot -resume
+## case 2 the paths in sampleInfo.csv points to quality-trimmed files 
+./nextflow run metaGx_develope.nf -w /path/to/scratch/directory --sampleInfo sampleInfo.csv --geneExtensionDBF /path/to/protein/database --useDiamond true --skipTaxClassify true --skipQtrim true --mode read-annot  -resume
