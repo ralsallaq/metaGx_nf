@@ -8,3 +8,11 @@ There are four ![pipelines](metaGx_pipelines.tiff) implemented in this repositor
 4. Specific-gene discovery (--mode read-gene)
 
 # Example: run assembly-based annotation on paired reads
+prepare a sample information CSV file (e.g. sampleInfo.csv) with the following headings: 
+R1=absolute path to forward reads
+R2=absolute path to reverse reads
+sname=sample unique identifier that will be used through the pipeline
+## case 1 perform quality trimming first: 
+./nextflow run metaGx_develope.nf -w /path/to/scratch/directory --sampleInfo sampleInfo.csv --mode assembly -resume
+## case 2 the paths in sampleInfo.csv points to quality-trimmed files 
+./nextflow run metaGx_develope.nf -w /path/to/scratch/directory --sampleInfo sampleInfo.csv --mode assembly --skipQtrim true -resume
